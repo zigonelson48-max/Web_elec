@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Salon Éclat – Friseursalon Musterstadt</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F8F3EC;
+  --warm:#FDFAF6;
+  --ink:#18150F;
+  --ink2:#2E2A22;
+  --gold:#B8935A;
+  --gold-light:#D4B07A;
+  --gold-pale:#F0E4CC;
+  --muted:#8A7F70;
+  --divide:#E5DDD1;
+  --white:#FFFFFF;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--warm);color:var(--ink);overflow-x:hidden}
+
+/* ── CURSOR GLOW ── */
+#cursor-glow{
+  pointer-events:none;position:fixed;width:300px;height:300px;
+  background:radial-gradient(circle,rgba(184,147,90,0.07) 0%,transparent 70%);
+  transform:translate(-50%,-50%);transition:opacity .3s;z-index:0;border-radius:50%;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 64px;height:76px;
+  background:rgba(253,250,246,0.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid transparent;
+  transition:border-color .4s,background .4s;
+}
+nav.scrolled{border-color:var(--divide);background:rgba(253,250,246,0.97)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;color:var(--ink)}
+.logo em{font-style:italic;color:var(--gold)}
+nav ul{list-style:none;display:flex;gap:2px}
+nav ul a{display:block;text-decoration:none;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px 16px;transition:color .2s;position:relative}
+nav ul a::after{content:'';position:absolute;bottom:6px;left:16px;right:16px;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .25s}
+nav ul a:hover{color:var(--ink)}
+nav ul a:hover::after{transform:scaleX(1)}
+.nav-book{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--white);background:var(--ink);padding:12px 28px;transition:background .25s,transform .2s}
+.nav-book:hover{background:var(--gold);transform:translateY(-1px)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:grid;grid-template-columns:55% 45%;padding-top:76px;
+  position:relative;overflow:hidden;
+}
+.hero-left{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 64px;position:relative;z-index:1;
+}
+.hero-tag{
+  display:flex;align-items:center;gap:10px;margin-bottom:36px;
+}
+.hero-tag-line{width:32px;height:1px;background:var(--gold)}
+.hero-tag span{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.hero-h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(56px,6.5vw,88px);
+  font-weight:300;line-height:.97;
+  color:var(--ink);margin-bottom:32px;
+}
+.hero-h1 em{font-style:italic;color:var(--gold)}
+.hero-h1 .line2{display:block;font-weight:600;letter-spacing:-.01em}
+.hero-desc{font-size:15px;color:var(--muted);line-height:1.85;max-width:380px;margin-bottom:52px}
+.hero-ctas{display:flex;gap:16px;align-items:center}
+.btn-fill{
+  text-decoration:none;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--white);background:var(--ink);padding:16px 36px;
+  transition:background .25s,transform .2s;display:inline-block;
+}
+.btn-fill:hover{background:var(--gold);transform:translateY(-2px)}
+.btn-line{
+  text-decoration:none;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:8px;
+  transition:color .2s;
+}
+.btn-line svg{transition:transform .2s}
+.btn-line:hover{color:var(--ink)}
+.btn-line:hover svg{transform:translateX(4px)}
+
+/* Hero right – stacked image cards */
+.hero-right{position:relative;background:var(--cream);overflow:hidden}
+.hero-img-main{
+  width:100%;height:100%;min-height:700px;
+  background:linear-gradient(160deg,#E8DDD0 0%,#D4C5B0 50%,#C2AF96 100%);
+  display:flex;align-items:center;justify-content:center;font-size:100px;
+  position:relative;
+}
+.hero-img-main::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 60%,rgba(24,21,15,0.55) 100%);
+}
+.hero-float-card{
+  position:absolute;bottom:48px;left:-32px;z-index:10;
+  background:var(--white);padding:20px 24px;border-left:3px solid var(--gold);
+  box-shadow:0 24px 60px rgba(0,0,0,0.12);
+  transform:translateY(20px);opacity:0;
+  animation:slideUp .7s .9s ease forwards;
+}
+@keyframes slideUp{to{transform:translateY(0);opacity:1}}
+.hero-float-card .fc-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--ink);line-height:1}
+.hero-float-card .fc-label{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.hero-scroll-hint{
+  position:absolute;bottom:40px;left:64px;display:flex;align-items:center;gap:12px;
+  font-size:10px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);
+  opacity:0;animation:fadeIn 1s 1.2s ease forwards;
+}
+@keyframes fadeIn{to{opacity:1}}
+.scroll-line{width:40px;height:1px;background:var(--divide)}
+
+/* ── SERVICES TABS ── */
+.services{padding:120px 64px;background:var(--warm)}
+.sec-eyebrow{font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,4.5vw,58px);font-weight:300;line-height:1.05;color:var(--ink);margin-bottom:56px}
+.sec-title em{font-style:italic}
+
+.tabs-nav{display:flex;gap:0;border-bottom:1px solid var(--divide);margin-bottom:56px}
+.tab-btn{
+  font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:14px 28px;border:none;background:none;cursor:pointer;color:var(--muted);
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;
+}
+.tab-btn.active{color:var(--ink);border-bottom-color:var(--gold)}
+.tab-btn:hover:not(.active){color:var(--ink2)}
+
+.tab-panel{display:none}
+.tab-panel.active{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--divide)}
+
+.svc-card{
+  background:var(--warm);padding:44px 36px;
+  transition:background .25s;cursor:default;
+  position:relative;overflow:hidden;
+}
+.svc-card::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--gold);transform:scaleX(0);transform-origin:left;
+  transition:transform .35s;
+}
+.svc-card:hover{background:var(--cream)}
+.svc-card:hover::before{transform:scaleX(1)}
+.svc-icon{font-size:26px;margin-bottom:18px}
+.svc-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--ink);margin-bottom:10px}
+.svc-desc{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:20px}
+.svc-price{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--gold)}
+
+/* ── ABOUT ── */
+.about{display:grid;grid-template-columns:1fr 1fr}
+.about-visual{
+  background:linear-gradient(150deg,#D8CEBF 0%,#BFB09A 100%);
+  min-height:600px;display:flex;align-items:center;justify-content:center;
+  font-size:90px;position:relative;overflow:hidden;
+}
+.about-visual::after{
+  content:'ÉCLAT';position:absolute;bottom:-20px;right:-10px;
+  font-family:'Cormorant Garamond',serif;font-size:160px;font-weight:300;
+  color:rgba(255,255,255,0.12);letter-spacing:.06em;line-height:1;pointer-events:none;
+}
+.about-content{padding:80px 64px;display:flex;flex-direction:column;justify-content:center;background:var(--cream)}
+.about-content p{font-size:15px;color:var(--muted);line-height:1.9;margin-bottom:20px}
+.stats-row{display:flex;gap:0;margin-top:40px;border-top:1px solid var(--divide);padding-top:40px}
+.stat-block{flex:1;padding-right:32px;border-right:1px solid var(--divide);margin-right:32px}
+.stat-block:last-child{border-right:none;margin-right:0;padding-right:0}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--ink);line-height:1;transition:color .3s}
+.stat-block:hover .stat-n{color:var(--gold)}
+.stat-l{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* ── COUNTER ANIMATION ── */
+.count-up{display:inline-block}
+
+/* ── TESTIMONIALS ── */
+.testimonials{padding:120px 64px;background:var(--ink)}
+.testimonials .sec-eyebrow{color:var(--gold)}
+.testimonials .sec-title{color:var(--white)}
+
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
+.testi-card{
+  padding:40px;border:1px solid rgba(255,255,255,0.07);
+  transition:border-color .3s,transform .3s,background .3s;
+  cursor:default;
+}
+.testi-card:hover{border-color:rgba(184,147,90,0.4);transform:translateY(-6px);background:rgba(255,255,255,0.03)}
+.testi-stars{color:var(--gold);font-size:13px;letter-spacing:3px;margin-bottom:18px}
+.testi-quote{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:300;font-style:italic;color:rgba(255,255,255,0.7);line-height:1.75;margin-bottom:28px}
+.testi-sep{width:28px;height:1px;background:var(--gold);margin-bottom:16px}
+.testi-author{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+
+/* ── GALLERY ROW ── */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.gallery-item{
+  aspect-ratio:3/4;overflow:hidden;cursor:pointer;
+  background:linear-gradient(160deg,#E2D5C4,#C8B89F);
+  position:relative;display:flex;align-items:center;justify-content:center;font-size:48px;
+}
+.gallery-item:nth-child(even){background:linear-gradient(160deg,#D4C5B0,#BFB0A0)}
+.gallery-item .gallery-overlay{
+  position:absolute;inset:0;background:rgba(24,21,15,0);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .35s;
+}
+.gallery-item .gallery-label{
+  font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;
+  color:white;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;
+}
+.gallery-item:hover .gallery-overlay{background:rgba(24,21,15,0.6)}
+.gallery-item:hover .gallery-label{opacity:1;transform:translateY(0)}
+
+/* ── CTA BAND ── */
+.cta-band{
+  padding:120px 64px;text-align:center;
+  background:var(--gold-pale);position:relative;overflow:hidden;
+}
+.cta-band::before{
+  content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(184,147,90,0.2) 0%,transparent 70%);
+  pointer-events:none;
+}
+.cta-band .sec-title{margin-bottom:16px}
+.cta-band p{font-size:15px;color:var(--muted);max-width:400px;margin:0 auto 44px;line-height:1.85}
+.cta-phone{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:var(--ink);text-decoration:none;letter-spacing:.02em;display:block;margin-top:24px;transition:color .2s}
+.cta-phone:hover{color:var(--gold)}
+
+/* ── FOOTER ── */
+footer{background:var(--ink2);padding:72px 64px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:64px}
+.foot-logo{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;letter-spacing:.12em;text-transform:uppercase;color:var(--white);margin-bottom:16px}
+.foot-logo em{color:var(--gold);font-style:italic}
+footer p{font-size:13px;color:rgba(255,255,255,0.35);line-height:1.9;max-width:260px}
+.foot-col h5{font-size:10px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:18px}
+.foot-col ul{list-style:none}
+.foot-col li{font-size:13px;color:rgba(255,255,255,0.35);margin-bottom:10px;line-height:1.6;transition:color .2s;cursor:pointer}
+.foot-col li:hover{color:var(--gold-light)}
+.foot-bottom{background:var(--ink);padding:20px 64px;display:flex;justify-content:space-between;align-items:center}
+.foot-bottom p{font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:.04em}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+
+@media(max-width:900px){
+  nav{padding:0 20px}
+  nav ul{display:none}
+  .hero{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .hero-left{padding:60px 20px}
+  .services{padding:60px 20px}
+  .tab-panel.active{grid-template-columns:1fr}
+  .about{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr 1fr}
+  .cta-band{padding:60px 20px}
+  footer{grid-template-columns:1fr;padding:40px 20px;gap:32px}
+  .foot-bottom{padding:16px 20px;flex-direction:column;gap:8px;text-align:center}
+}
+</style>
+</head>
+<body>
+<div id="cursor-glow"></div>
+
+<nav id="mainNav">
+  <a href="#" class="logo">Salon <em>Éclat</em></a>
+  <ul>
+    <li><a href="#services">Leistungen</a></li>
+    <li><a href="#about">Über uns</a></li>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="#kontakt" class="nav-book">Termin buchen</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag reveal">
+      <div class="hero-tag-line"></div>
+      <span>Friseursalon · Musterstadt seit 2009</span>
+    </div>
+    <h1 class="hero-h1 reveal reveal-delay-1">
+      Ihr Haar.<br>
+      <em><span class="line2">Ihr Auftritt.</span></em>
+    </h1>
+    <p class="hero-desc reveal reveal-delay-2">
+      Wir schneiden nicht einfach Haare. Wir gestalten Ihren Look mit Präzision, Leidenschaft und einem feinen Gespür für das, was wirklich zu Ihnen passt.
+    </p>
+    <div class="hero-ctas reveal reveal-delay-3">
+      <a href="#kontakt" class="btn-fill">Jetzt Termin sichern</a>
+      <a href="#services" class="btn-line">
+        Leistungen
+        <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M1 5h14M10 1l4 4-4 4" stroke="#8A7F70" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-main">💇</div>
+    <div class="hero-float-card">
+      <div class="fc-num">15+</div>
+      <div class="fc-label">Jahre Erfahrung</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES MIT TABS -->
+<section class="services" id="services">
+  <p class="sec-eyebrow reveal">Was wir anbieten</p>
+  <h2 class="sec-title reveal reveal-delay-1">Unsere <em>Leistungen</em></h2>
+
+  <div class="tabs-nav reveal">
+    <button class="tab-btn active" data-tab="damen">Damen</button>
+    <button class="tab-btn" data-tab="herren">Herren</button>
+    <button class="tab-btn" data-tab="special">Special</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-damen">
+    <div class="svc-card">
+      <div class="svc-icon">✂️</div>
+      <div class="svc-name">Damenhaarschnitt</div>
+      <p class="svc-desc">Wash, Cut & Blowdry – persönlich abgestimmt auf Ihren Typ und Ihre Wunschform.</p>
+      <div class="svc-price">ab 45 €</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon">🎨</div>
+      <div class="svc-name">Balayage & Highlights</div>
+      <p class="svc-desc">Natürlich aussehendes Lichtspiel – von subtil bis dramatisch, ganz nach Ihrem Wunsch.</p>
+      <div class="svc-price">ab 95 €</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon">💆</div>
+      <div class="svc-name">Tiefenpflege & Kur</div>
+      <p class="svc-desc">Intensive Behandlung für geschädigtes oder strapaziertes Haar – Glanz und Kraft garantiert.</p>
+      <div class="svc-price">ab 25 €</div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-herren">
+    <div class="svc-card">
+      <div class="svc-icon">🪒</div>
+      <div class="svc-name">Herrenschnitt</div>
+      <p class="svc-desc">Klassisch oder modern – Waschen, Schneiden, Föhnen inklusive Styling-Beratung.</p>
+      <div class="svc-price">ab 28 €</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon">👦</div>
+      <div class="svc-name">Bartpflege</div>
+      <p class="svc-desc">Konturenschnitt, Rasur oder Vollpflege – Ihr Bart in besten Händen.</p>
+      <div class="svc-price">ab 18 €</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon">✨</div>
+      <div class="svc-name">Komplett-Paket Herren</div>
+      <p class="svc-desc">Haarschnitt + Bartpflege + Kopfhautmassage – das perfekte Rundum-Erlebnis.</p>
+      <div class="svc-price">ab 55 €</div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="tab-special">
+    <div class="svc-card">
+      <div class="svc-icon">👰</div>
+      <div class="svc-name">Brautfrisur</div>
+      <p class="svc-desc">Probetermin inklusive – Ihr schönster Auftritt verdient perfekte Vorbereitung.</p>
+      <div class="svc-price">ab 120 €</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon">🧒</div>
+      <div class="svc-name">Kinderschnitt</div>
+      <p class="svc-desc">Geduldig, liebevoll und schnell – damit auch der Nachwuchs strahlt.</p>
+      <div class="svc-price">ab 18 €</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon">🎁</div>
+      <div class="svc-name">Geschenkgutschein</div>
+      <p class="svc-desc">Das perfekte Geschenk für jeden Anlass – in beliebiger Höhe, sofort verfügbar.</p>
+      <div class="svc-price">ab 30 €</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-visual">💇</div>
+  <div class="about-content">
+    <p class="sec-eyebrow reveal">Über uns</p>
+    <h2 class="sec-title reveal reveal-delay-1">Ein Salon.<br><em>Kein Fließband.</em></h2>
+    <p class="reveal reveal-delay-1">Wir nehmen uns Zeit für Sie – bei jedem Besuch. Inhaberin Laura Müller und ihr Team aus vier erfahrenen Friseurmeistern arbeiten mit Produkten, die gut für Haar und Umwelt sind.</p>
+    <p class="reveal reveal-delay-2">Seit 2009 begrüßen wir Stammkunden, neue Gesichter und alles dazwischen. Unser Salon ist ein Ort, an dem Sie sich wirklich wohlfühlen.</p>
+    <div class="stats-row reveal reveal-delay-2">
+      <div class="stat-block">
+        <div class="stat-n" data-target="2400">0</div>
+        <div class="stat-l">Kunden / Jahr</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-n" data-target="4">0</div>
+        <div class="stat-l">Friseurmeister</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-n" data-target="15">0</div>
+        <div class="stat-l">Jahre Erfahrung</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<div class="gallery" id="galerie">
+  <div class="gallery-item">💇<div class="gallery-overlay"><span class="gallery-label">Damenschnitte</span></div></div>
+  <div class="gallery-item">✂️<div class="gallery-overlay"><span class="gallery-label">Colorationen</span></div></div>
+  <div class="gallery-item">🎨<div class="gallery-overlay"><span class="gallery-label">Balayage</span></div></div>
+  <div class="gallery-item">👰<div class="gallery-overlay"><span class="gallery-label">Brautfrisuren</span></div></div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <p class="sec-eyebrow reveal">Was Kunden sagen</p>
+  <h2 class="sec-title reveal reveal-delay-1">Echte <em>Stimmen</em></h2>
+  <div class="testi-grid">
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">„Endlich ein Salon, der wirklich zuhört. Laura hat genau verstanden, was ich wollte – und noch besser umgesetzt."</p>
+      <div class="testi-sep"></div>
+      <div class="testi-author">Sabine K. · Stammkundin seit 2017</div>
+    </div>
+    <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">„Ich komme seit 8 Jahren hierher. Das Team ist freundlich, professionell – und der Kaffee ist auch nicht schlecht."</p>
+      <div class="testi-sep"></div>
+      <div class="testi-author">Thomas B. · Stammkunde</div>
+    </div>
+    <div class="testi-card reveal reveal-delay-3">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">„Meine Hochzeitsfrisur war ein absoluter Traum. Absolut empfehlenswert für alle Bräute in der Region."</p>
+      <div class="testi-sep"></div>
+      <div class="testi-author">Jana M. · Braut 2024</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band" id="kontakt">
+  <p class="sec-eyebrow">Termin vereinbaren</p>
+  <h2 class="sec-title">Bereit für einen<br><em>neuen Look?</em></h2>
+  <p>Rufen Sie uns an oder schreiben Sie uns – wir finden einen Termin, der zu Ihnen passt. Ganz ohne Warteliste.</p>
+  <a href="tel:+4902721234567" class="btn-fill">📞 Jetzt anrufen</a>
+  <a href="tel:+4902721234567" class="cta-phone">02721 / 123 456</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="foot-logo">Salon <em>Éclat</em></div>
+    <p>Ihr Friseursalon in Musterstadt. Seit 2009 für Schönheit, Stil und persönliche Beratung.</p>
+  </div>
+  <div class="foot-col">
+    <h5>Leistungen</h5>
+    <ul>
+      <li>Damenhaarschnitt</li>
+      <li>Herrenschnitt</li>
+      <li>Colorationen</li>
+      <li>Brautfrisur</li>
+      <li>Kinderschnitt</li>
+    </ul>
+  </div>
+  <div class="foot-col">
+    <h5>Kontakt</h5>
+    <ul>
+      <li>Musterstraße 14, 57413 Musterstadt</li>
+      <li>02721 / 123 456</li>
+      <li>info@salon-eclat.de</li>
+      <li>Mo–Fr 9–18 · Sa 8–15 Uhr</li>
+    </ul>
+  </div>
+</footer>
+<div class="foot-bottom">
+  <p>© 2025 Salon Éclat · Alle Rechte vorbehalten</p>
+  <p>Impressum · Datenschutz</p>
+</div>
+
+<script>
+// Cursor glow
+const glow = document.getElementById('cursor-glow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+// Nav scroll
+const nav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Tabs
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Count-up
+function countUp(el) {
+  const target = parseInt(el.dataset.target);
+  const duration = 1800;
+  const start = performance.now();
+  const tick = now => {
+    const progress = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(ease * target).toLocaleString('de');
+    if(progress < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+const countObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) { countUp(e.target); countObserver.unobserve(e.target); }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-target]').forEach(el => countObserver.observe(el));
+</script>
+</body>
+</html>
